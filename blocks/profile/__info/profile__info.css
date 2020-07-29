@@ -4,6 +4,7 @@
   flex-wrap: wrap;
 }
 
+
 @media all and (max-width: 740px) {
   .profile__info {
     flex-basis: 0;

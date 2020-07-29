@@ -6,6 +6,13 @@
   max-width: 90%;
 }
 
+@media all and (max-width: 930px) {
+  .profile__title {
+    flex-basis: 70%;
+  }
+}
+
+
 @media all and (max-width: 740px) {
   .profile__title {
     font-size: 27px;
