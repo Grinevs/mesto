@@ -10,15 +10,10 @@
   transition: border .2s linear;
   cursor: pointer;
   align-self: center;
-  
 }
-
 .profile__edit-button:hover {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
-
-/* 
-добавить медиазапрос на 18px */
 
 @media all and (max-width: 740px) {
   .profile__edit-button {
