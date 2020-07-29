@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-@media all and (max-width: 740px) {
+@media all and (max-width: 595px) {
   .elements{
     gap: 18px 0;
   }
