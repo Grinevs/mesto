@@ -14,56 +14,60 @@
       <section class="profile">
         <img src="./images/Kusto.jpg" alt="Портрет Жак-Ив Кусто в красной шапке на фоне моря" class="profile__avatar">
         <div class="profile__info">
-          <h2 class="profile__title">Жак-Ив Кусто</h2><div class="profile__edit-button"></div>
+          <div class="profile__title-edit">
+            <h2 class="profile__title">Жак-Ив Кусто</h2><button type="button" class="profile__edit-button"></button>
+          </div>
           <p class="profile__subtitle">Исследователь океана</p>
         </div>
-        <div class="profile__add-button"></div>
+        <button type="button" class="profile__add-button"></button>
       </section>
-      <section class="elements">
-        <div class="element">
+      <section class="elements"> 
+        <ul class="elements__list">
+        <li class="element">
           <img src="./images/altai.jpg" alt="река в горах" class="element__img">
-          <p class="element__title">Алтай</p>
-          <div class="element__like-button"></div>
-        </div>
-        <div class="element">
+          <h3 class="element__title">Алтай</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        <li class="element">
           <img src="./images/elbrus.jpg" alt="Велосепедист на фоне эльбруса" class="element__img">
-          <p class="element__title">Гора Эльбрус</p>
-          <div class="element__like-button"></div>
-        </div>
-        <div class="element">
+          <h3 class="element__title">Гора Эльбрус</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        <li class="element">
           <img src="./images/dombay.jpg" alt="Заснеженные горы домбая" class="element__img">
-          <p class="element__title">Домбай</p>
-          <div class="element__like-button"></div>
-        </div>
-        <div class="element">
+          <h3 class="element__title">Домбай</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        <li class="element">
           <img src="./images/ruskeala.jpg" alt="искуственное озеро" class="element__img">
-          <p class="element__title">Рускеала</p>
-          <div class="element__like-button"></div>
-        </div>
-        <div class="element">
+          <h3 class="element__title">Рускеала</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        <li class="element">
           <img src="./images/kamchatka.jpg" alt="дорога на ключевскую сопку" class="element__img">
-          <p class="element__title">Камчатка</p>
-          <div class="element__like-button"></div>
-        </div>
-        <div class="element">
+          <h3 class="element__title">Камчатка</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        <li class="element">
           <img src="./images/baikal.jpg" alt="лёд в трещинах" class="element__img">
-          <p class="element__title">Байкал во льдах</p>
-          <div class="element__like-button"></div>
-        </div>
+          <h3 class="element__title">Байкал во льдах</h3>
+          <button type="button" class="element__like-button"></button>
+        </li>
+        </ul>
       </section>
     </main>
     <footer class="footer">
       <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
     </footer>
     <div class="popup">
-      <div class="popup__close-icon"></div>
+      <button type="button" class="popup__close-icon"></button>
       <div class="popup__container">
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form"><input type="text" required class="popup__edit">
-          <input type="text" required class="popup__edit">
+          <form class="popup__form" name="edit_form"><input type="text" name="title" required class="popup__edit popup__edit_place_first ">
+          <input type="text" name="subtitle" required class="popup__edit popup__edit_place_second">
           <button class="popup__button" type="submit">Сохранить</button></form>
       </div>
     </div>
-    <script src="./index.js"></script>
+    <script src="./scripts/index.js"></script>
 </body>
 </html>

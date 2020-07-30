@@ -9,6 +9,9 @@
   left: 463px;
   transition: transform .3s linear;
   cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
 }
 
 .popup__close-icon:hover {

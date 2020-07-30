@@ -3,19 +3,18 @@
   font-size: 42px;
   line-height: 1.33;
   font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   max-width: 90%;
+  overflow: hidden;
 }
 
-@media all and (max-width: 930px) {
-  .profile__title {
-    flex-basis: 70%;
-  }
-}
 
 @media all and (max-width: 740px) {
   .profile__title {
     font-size: 27px;
     line-height: 56px;
     max-width: 80%;
+    text-align: center;
   }
 }

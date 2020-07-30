@@ -10,4 +10,11 @@
   z-index: 6;
   display: block;
   background-color: white;
+  border: 0;
+  outline: 0;
+  transition: transform 0.1s linear;
+}
+
+.element__like-button:hover {
+  transform: scale(1.3, 1.3);
 }
