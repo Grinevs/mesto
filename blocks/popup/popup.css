@@ -1,14 +1,17 @@
 .popup {
+  visibility: hidden;
+  display: flex;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0, .5);
-  display: none;
   justify-content: center;
   align-items: center;
-  position: fixed;
   top: 0;
   left: 0;
   z-index: 8;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 0.5s;
+  position: fixed;
 }
 
 @media all and (max-width: 645px) {
