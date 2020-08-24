@@ -119,6 +119,7 @@ function saveInfoCard(evt) {
 }
 
 popupButtonSaveProfile.addEventListener('submit', saveInfo);
+
 popupButtonSaveCard.addEventListener('submit', saveInfoCard);
 
 editButton.addEventListener('click', function(evt) {
