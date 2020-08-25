@@ -14,44 +14,10 @@ const cardTitleInput = document.querySelector('.popup_card__edit_place_first');
 const cardLinkInput =  document.querySelector('.popup_card__edit_place_second');
 const userName= document.querySelector('.profile__title');
 const userProfession = document.querySelector('.profile__subtitle');
-
-const initialCards = [
-  {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-      alt: 'горысо снегом'
-  },
-  {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-      alt: 'зимнее озеро'
-  },
-  {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-      alt: 'многоэтажки в один ряд'
-  },
-  {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-      alt: 'ключевская сопка'
-  },
-  {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-      alt: 'железная дорога'
-  },
-  {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-      alt: 'замерзшее озеро посреди скал'
-  }
-];
-
 const cardTemplate = document.querySelector('#card').content;
 const cards = document.querySelector('.elements__list');
 
-function createCard(cardTitle, cardSrc='./images/elbrus.jpg', cardAlt='картинка красивого места') {
+function createCard(cardTitle, cardSrc='./images/elbrus.jpg', cardAlt='картинка красивого места') { // создание одной карты
   const card = cardTemplate.cloneNode(true);
   const likeButton = card.querySelector('.element__like-button');
   const trashButton = card.querySelector('.element__recyclebin');
@@ -74,55 +40,53 @@ function createCard(cardTitle, cardSrc='./images/elbrus.jpg', cardAlt='карт�
   cards.prepend(card);
 }
 
-initialCards.forEach(function(item) { 
+initialCards.forEach(function(item) {         //заполнение картами из коллекции
   createCard(item.name, item.link, item.alt);
 }); 
 
-function togglePopup(evt) {
+function togglePopup(evt) {                     // открытие и закрытие Попапов
   evt.classList.toggle('popup_opened')
 }
 
-function toggleUserProfilePopup() {
+function toggleUserProfilePopup() {           // Создание попапа профайла
   userNameInput.value = userName.textContent ;
   userProfessionInput.value = userProfession.textContent;
   togglePopup(userProfilePopup);
 }
 
-function toggleAddCardPopup() {
+function toggleAddCardPopup() {     //  редактирование попапа добавления места - карты
   togglePopup(userCardPopup);
 }
 
-function toggleImagePopup(evt, imageTitle) {
+function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
   document.querySelector('.popup_photo__pic').src = evt.src;
   document.querySelector('.popup_photo__title').textContent = imageTitle;
   togglePopup(imagePopup);
 }
 
-function saveProfile(evt) {
+function saveProfile(evt) {            // редактирование профайла 
   evt.preventDefault();
   userName.textContent  = userNameInput.value;
   userProfession.textContent  = userProfessionInput.value;
   togglePopup(userProfilePopup);
 }
 
-function saveCard(evt) {
+function saveCard(evt) {          // создание новой карты
   evt.preventDefault();
   createCard(cardTitleInput.value, cardLinkInput.value);
   togglePopup(userCardPopup);
 }
 
-saveProfileButton.addEventListener('submit', saveProfile);
+saveProfileButton.addEventListener('submit', saveProfile);   // слушатели кнопок
 saveCardButton.addEventListener('submit', saveCard);
 editProfileButton.addEventListener('click', toggleUserProfilePopup);
 addCardButton.addEventListener('click', toggleAddCardPopup);
-closeAddCardPopupButton.addEventListener('click',function(evt) {
+closeAddCardPopupButton.addEventListener('click',function() {
   togglePopup(userCardPopup)
 });
-
 closeUserProfilePopupButton.addEventListener('click',function() {
   togglePopup(userProfilePopup)
 });
-
 closeImagePopupButton.addEventListener('click',function() {
   togglePopup(imagePopup)
 });
