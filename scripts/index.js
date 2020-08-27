@@ -56,6 +56,8 @@ function toggleUserProfilePopup() {           // Создание попапа �
 
 function toggleAddCardPopup() {     //  редактирование попапа добавления места - карты
   togglePopup(userCardPopup);
+  cardTitleInput.value ='';
+  cardLinkInput.value = '';
 }
 
 function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
