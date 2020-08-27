@@ -17,7 +17,24 @@ const userProfession = document.querySelector('.profile__subtitle');
 const cardTemplate = document.querySelector('#card').content;
 const cards = document.querySelector('.elements__list');
 
-function createCard(cardTitle, cardSrc='./images/elbrus.jpg', cardAlt='картинка красивого места') { // создание одной карты
+function togglePopup(popup) {                     // открытие и закрытие Попапов
+  popup.classList.toggle('popup_opened')
+}
+
+function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
+  document.querySelector('.popup_photo__pic').src = evt.src;
+  document.querySelector('.popup_photo__pic').alt = evt.alt;
+  document.querySelector('.popup_photo__title').textContent = imageTitle;
+  togglePopup(imagePopup);
+}
+
+function toggleUserProfilePopup() {           // Создание попапа профайла
+  userNameInput.value = userName.textContent ;
+  userProfessionInput.value = userProfession.textContent;
+  togglePopup(userProfilePopup);
+}
+
+function createCard(cardTitle, cardSrc, cardAlt) { // создание одной карты
   const card = cardTemplate.cloneNode(true);
   const likeButton = card.querySelector('.element__like-button');
   const trashButton = card.querySelector('.element__recyclebin');
@@ -37,33 +54,21 @@ function createCard(cardTitle, cardSrc='./images/elbrus.jpg', cardAlt='карт�
     const itemToDelete = trashButton.closest('.element');
     itemToDelete.remove();
   });
+  return card;
+} 
+
+function appendCard(card) {  //добавление карты в дом
   cards.prepend(card);
 }
 
 initialCards.forEach(function(item) {         //заполнение картами из коллекции
-  createCard(item.name, item.link, item.alt);
+  appendCard(createCard(item.name, item.link, item.alt));
 }); 
-
-function togglePopup(evt) {                     // открытие и закрытие Попапов
-  evt.classList.toggle('popup_opened')
-}
-
-function toggleUserProfilePopup() {           // Создание попапа профайла
-  userNameInput.value = userName.textContent ;
-  userProfessionInput.value = userProfession.textContent;
-  togglePopup(userProfilePopup);
-}
 
 function toggleAddCardPopup() {     //  редактирование попапа добавления места - карты
   togglePopup(userCardPopup);
   cardTitleInput.value ='';
   cardLinkInput.value = '';
-}
-
-function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
-  document.querySelector('.popup_photo__pic').src = evt.src;
-  document.querySelector('.popup_photo__title').textContent = imageTitle;
-  togglePopup(imagePopup);
 }
 
 function saveProfile(evt) {            // редактирование профайла 
@@ -75,7 +80,7 @@ function saveProfile(evt) {            // редактирование проф�
 
 function saveCard(evt) {          // создание новой карты
   evt.preventDefault();
-  createCard(cardTitleInput.value, cardLinkInput.value);
+  appendCard(createCard(cardTitleInput.value, cardLinkInput.value));
   togglePopup(userCardPopup);
 }
 
