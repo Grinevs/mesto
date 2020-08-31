@@ -35,8 +35,11 @@
       <button type="button" class="popup__close-icon popup_profile__close-icon"></button>
       <div class="popup__container">
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form popup_profile__form" name="edit_form"><input type="text" name="title" placeholder="Имя" required class="popup__edit popup_profile__title">
-          <input type="text" name="subtitle" placeholder="Профессия" required class="popup__edit popup_profile__subtitle">
+          <form class="popup__form popup_profile__form" name="edit_form" novalidate>
+          <input id="popup_profile__title" type="text" name="title" placeholder="Имя" required class="popup__edit popup_profile__title" minlength="2" maxlength="40">
+          <span id="popup_profile__title-error" class="popup__input-error"></span>
+          <input id="popup_profile__subtitle" type="text" name="subtitle" placeholder="Профессия" required class="popup__edit popup_profile__subtitle" minlength="2" maxlength="200">
+          <span id="popup_profile__subtitle-error" class="popup__input-error"></span>
           <button class="popup__button popup_profile__button" type="submit">Сохранить</button></form>
       </div>
     </div>
@@ -44,8 +47,11 @@
         <button type="button" class="popup__close-icon popup_card__close-icon"></button>
         <div class="popup__container">
             <h3 class="popup__title">Новое место</h3>
-            <form class="popup__form popup_card__form" name="edit_form"><input type="text" placeholder="Название" name="title" required class="popup__edit popup_card__title">
-            <input type="text" placeholder="Ссылка на картинку" name="subtitle" required class="popup__edit popup_card__src">
+            <form class="popup__form popup_card__form" name="edit_form" novalidate>
+            <input id="popup_card__title" type="text" placeholder="Название" name="title" required class="popup__edit popup_card__title" minlength="2" maxlength="40">
+            <span id="popup_card__title-error" class="popup__input-error"></span>
+            <input  id="popup_card__src" type="url" placeholder="Ссылка на картинку" name="subtitle" required class="popup__edit popup_card__src">
+            <span id="popup_card__src-error" class="popup__input-error"></span>
             <button class="popup__button popup_card__button" type="submit">Сохранить</button></form>
         </div>
     </div> 
@@ -68,5 +74,6 @@
 </template>
   <script src="./scripts/initial-сards.js"></script>
   <script src="./scripts/index.js"></script>
+  <script src="./scripts/validate.js"></script>
 </body>
 </html>

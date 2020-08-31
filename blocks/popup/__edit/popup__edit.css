@@ -1,5 +1,5 @@
 .popup__edit {
-  margin-bottom: 28px;
+  margin-bottom: 4px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
   background: #fff;
@@ -11,12 +11,11 @@
   box-sizing: border-box;
 } 
 
-.popup__edit:last-of-type {
-  margin-bottom: 0;
-} 
+
 
 .popup__edit:focus {
   outline: 3px solid rgba(26, 76, 241, 0.5);
 }
+
 
 

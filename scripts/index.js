@@ -16,15 +16,34 @@ const userName= document.querySelector('.profile__title');
 const userProfession = document.querySelector('.profile__subtitle');
 const cardTemplate = document.querySelector('#card').content;
 const cards = document.querySelector('.elements__list');
+const popupPhoto = document.querySelector('.popup_photo__pic');
+const popupTitle = document.querySelector('.popup_photo__title');
+const arrayOfPopups = document.querySelectorAll('.popup')
 
-function togglePopup(popup) {                     // открытие и закрытие Попапов
-  popup.classList.toggle('popup_opened')
+function toggleKeyEventListener(popup) {  // добавялеет слушателя по всей странице по esc
+  if (popup.classList.contains('popup_opened')) {
+    document.addEventListener('keydown', function(evt) {
+      if (evt.key === 'Escape') {
+        popup.classList.remove('popup_opened');
+      }
+    });
+  } else {
+    document.removeEventListener('keydown', function(evt) {
+        if (evt.key === 'Escape') {
+          popup.classList.remove('popup_opened');
+      }});
+  }
+}
+
+function togglePopup(popup) {     // открытие и закрытие Попапов 
+ popup.classList.toggle('popup_opened');
+ toggleKeyEventListener(popup)
 }
 
 function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
-  document.querySelector('.popup_photo__pic').src = evt.src;
-  document.querySelector('.popup_photo__pic').alt = evt.alt;
-  document.querySelector('.popup_photo__title').textContent = imageTitle;
+  popupPhoto.src = evt.src;
+  popupPhoto.alt = evt.alt;
+  popupTitle.textContent = imageTitle;
   togglePopup(imagePopup);
 }
 
@@ -97,3 +116,26 @@ closeUserProfilePopupButton.addEventListener('click',function() {
 closeImagePopupButton.addEventListener('click',function() {
   togglePopup(imagePopup)
 });
+
+arrayOfPopups.forEach(function(popup) {                   // добавления слушатей попаов
+  popup.addEventListener('mousedown',function(evt) {
+    if (evt.target.classList.contains('popup')) {   
+      togglePopup(evt.target)
+    }
+  })
+})
+
+
+// function togglePopup(popup) {       
+//   popup.classList.toggle('popup_opened');            // открытие и закрытие Попапов c добавлением/удалением слушателя для каждого попапа или такой лучше?
+//  if (popup.classList.contains('popup_opened'))  {       
+//    popup.addEventListener('click', function() {
+//      popup.classList.remove('popup_opened')
+//    });
+// } 
+//  else { 
+//    popup.removeEventListener('click', function() {
+//      popup.classList.add('popup_opened');
+//    })
+//  }
+// }

@@ -8,10 +8,11 @@
   margin-top: 32px;
   margin-bottom: 42px;
   align-self: flex-start;
-  padding-left: 36px;
+  padding-left: 40px;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  margin: 0;
+  margin-top: 32px;
   width: 80%;
-  
+  overflow: hidden;
 }
