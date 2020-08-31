@@ -17,7 +17,7 @@ const toggleButtonState = (inputList, buttonElement, obj) => {   /// перек�
 const showInputError = (formElement, inputElement, errorMessage, obj) => {  // показывает ошибку в спане ниже
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add(obj.errorClass); // незадействуются в данном проекте эти классы, это типа на будущее?
+  errorElement.classList.add(obj.errorClass); // незадействуются в данном проекте эти классы, это на будущее?
   inputElement.classList.add(obj.inputErrorClass);
 };
 
@@ -68,6 +68,6 @@ enableValidation({
   inputSelector: '.popup__edit',
   submitButtonSelector: '.popup__button',
   inactiveButtonClass: 'popup__button_inactive',
-  inputErrorClass: 'popup__input_type_error',
+  inputErrorClass: 'popup__edit_type_error',
   errorClass: 'popup__error_visible'
 });
