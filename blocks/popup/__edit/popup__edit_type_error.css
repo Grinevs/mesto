@@ -4,5 +4,5 @@
 
 
 .popup__edit_type_error:focus {
-  outline: none;
+  border-bottom: 1px solid #ff0000;
 }
