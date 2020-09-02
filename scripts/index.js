@@ -31,6 +31,8 @@ function documentListener(popup) {
 function keyEventSwitcher(evt) {  // определяет события
       if (evt.key === 'Escape') {   // голову сломал как сделать красивее, непонимаю как передать агрумент с нужным попапом сюда
         document.querySelector('.popup_opened').classList.remove('popup_opened');
+        const popupOpened = document.querySelector('.popup__opened');
+        togglePopup(popupOpened);
   } 
 }
 
