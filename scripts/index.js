@@ -20,24 +20,23 @@ const popupPhoto = document.querySelector('.popup_photo__pic');
 const popupTitle = document.querySelector('.popup_photo__title');
 const arrayOfPopups = document.querySelectorAll('.popup')
 
-function toggleKeyEventListener(popup) {  // добавялеет слушателя по всей странице по esc
+function documentListener(popup) {
   if (popup.classList.contains('popup_opened')) {
-    document.addEventListener('keydown', function(evt) {
-      if (evt.key === 'Escape') {
-        popup.classList.remove('popup_opened');
-      }
-    });
+    document.addEventListener('keydown', keyEventSwitcher)
   } else {
-    document.removeEventListener('keydown', function(evt) {
-        if (evt.key === 'Escape') {
-          popup.classList.remove('popup_opened');
-      }});
+    document.removeEventListener('keydown', keyEventSwitcher)
   }
+}
+
+function keyEventSwitcher(evt) {  // определяет события
+      if (evt.key === 'Escape') {   // голову сломал как сделать красивее, непонимаю как передать агрумент с нужным попапом сюда
+        document.querySelector('.popup_opened').classList.remove('popup_opened');
+  } 
 }
 
 function togglePopup(popup) {     // открытие и закрытие Попапов 
  popup.classList.toggle('popup_opened');
- toggleKeyEventListener(popup)
+ documentListener(popup);
 }
 
 function toggleImagePopup(evt, imageTitle) {         //  Создание попапа картинки с описанием
@@ -86,8 +85,6 @@ initialCards.forEach(function(item) {         //заполнение карта�
 
 function toggleAddCardPopup() {     //  редактирование попапа добавления места - карты
   togglePopup(userCardPopup);
-  cardTitleInput.value ='';
-  cardLinkInput.value = '';
 }
 
 function saveProfile(evt) {            // редактирование профайла 
@@ -124,18 +121,3 @@ arrayOfPopups.forEach(function(popup) {                   // добавлени�
     }
   })
 })
-
-
-// function togglePopup(popup) {       
-//   popup.classList.toggle('popup_opened');            // открытие и закрытие Попапов c добавлением/удалением слушателя для каждого попапа или такой лучше?
-//  if (popup.classList.contains('popup_opened'))  {       
-//    popup.addEventListener('click', function() {
-//      popup.classList.remove('popup_opened')
-//    });
-// } 
-//  else { 
-//    popup.removeEventListener('click', function() {
-//      popup.classList.add('popup_opened');
-//    })
-//  }
-// }
