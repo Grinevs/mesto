@@ -10,7 +10,7 @@
   left: 0;
   z-index: 8;
   opacity: 0;
-  transition: visibility 0.5s, opacity 0.5s;
+  transition: visibility 0.25s, opacity 0.25s;
   position: fixed;
 }
 
