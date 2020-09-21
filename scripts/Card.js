@@ -1,13 +1,17 @@
+import {toggleImagePopup} from './utils.js'
+export {Card}
+
 class Card {
-  constructor(cardTitle, cardSrc, cardAlt, likeButtonValue = 'false') {
-      this._cardTitle = cardTitle;
-      this._cardSrc = cardSrc;
-      this._cardAlt = cardAlt;
-      this._likeButtonValue = likeButtonValue;
+  constructor(cardData, cardSelector) {
+      this._cardTitle = cardData.name;
+      this._cardSrc = cardData.link;
+      this._cardAlt = cardData.alt;
+      this._likeButtonValue = cardData.likeButtonValue;
+      this._cardSelector = cardSelector;
   }
 
   _createCard() {
-    const cardTemplate = document.querySelector('#card').content;
+    const cardTemplate = document.querySelector(this._cardSelector).content;
     const card = cardTemplate.cloneNode(true);
     return card;
   }
@@ -29,12 +33,13 @@ class Card {
 
   _imgClick(evt) {
     const eventTarget = evt.target;
-    toggleImagePopup(eventTarget, this._cardTitle);
+    toggleImagePopup(this._cardSrc, this._cardTitle);
   }
 
   _trashButtonClick() {
     const itemToDelete = this._trashButton.closest('.element');
       itemToDelete.remove();
+      this._element = null;
   }
 
   _setEventListeners() {
@@ -50,7 +55,6 @@ class Card {
   }
 };
 
-import {toggleImagePopup} from './utils.js'
-export {Card}
+
 
 

@@ -4,7 +4,7 @@ function enableValidation(listOfClasses) {
   const formList = Array.from(document.querySelectorAll(listOfClasses.formSelector));
   formList.forEach((formElement) => {
     const formValidator = new FormValidator(formElement, listOfClasses);
-    formValidator.enableValidation(formElement)
+    formValidator.enableValidation()
   });
 }
 
