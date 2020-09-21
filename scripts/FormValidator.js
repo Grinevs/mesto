@@ -4,9 +4,9 @@ export class FormValidator {
     this._listOfClasses = listOfClasses;
   }
 
-  _setEventListeners(formElement) {   //ставимм слушатей ко всем полям формы
-    this._inputList = Array.from(formElement.querySelectorAll(this._listOfClasses.inputSelector)); 
-    this._buttonElement = formElement.querySelector(this._listOfClasses.submitButtonSelector);
+  _setEventListeners() {   //ставимм слушатей ко всем полям формы
+    this._inputList = Array.from(this._formElement.querySelectorAll(this._listOfClasses.inputSelector)); 
+    this._buttonElement = this._formElement.querySelector(this._listOfClasses.submitButtonSelector);
     this._toggleButtonState();
     this._inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', () => {
@@ -54,19 +54,12 @@ export class FormValidator {
     inputElement.classList.remove(this._listOfClasses.inputErrorClass);
   };
   
-  _reloadFormValidation(evt)  {    // перезапускает валидацию формы после сабмита
-    evt.target.querySelectorAll(this._listOfClasses.inputSelector).forEach(item => {
-      item.value='';
-    })
-    this._toggleButtonState();
-  }
-
-  enableValidation(formElement) {  // добавляет слушатели для форм и запускает функцию для слушателей елементов форм
-      formElement.addEventListener('submit', (evt) => {
+  enableValidation() {  // добавляет слушатели для форм и запускает функцию для слушателей елементов форм
+    this._formElement.addEventListener('submit', (evt) => {
         evt.preventDefault();
-        this._reloadFormValidation(evt);
+        this._toggleButtonState();
       });
-      this._setEventListeners(formElement);
+      this._setEventListeners();
 
   };
 }

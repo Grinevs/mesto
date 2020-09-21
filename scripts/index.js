@@ -1,10 +1,36 @@
-import {editProfileButton, addCardButton, userProfilePopup, userCardPopup, imagePopup, closeUserProfilePopupButton,
-  closeAddCardPopupButton, closeImagePopupButton, saveProfileButton, saveCardButton, arrayOfPopups} from './const.js';
+import {editProfileButton, addCardButton, userProfilePopup, 
+  userCardPopup, imagePopup, closeUserProfilePopupButton,
+  closeAddCardPopupButton, closeImagePopupButton, saveProfileButton, 
+  userName, userNameInput, userProfession, userProfessionInput, saveCardButton, 
+  arrayOfPopups, cardTitleInput, cardLinkInput} from './const.js';
 
 import {initialCards} from './initial-сards.js';
 import {Card} from './Card.js';
-import {togglePopup, toggleUserProfilePopup, toggleAddCardPopup, appendCard, saveProfile, saveCard} from './utils.js'
+import {togglePopup, toggleAddCardPopup, appendCard} from './utils.js'
 
+function saveProfile(evt) {            // редактирование профайла 
+  evt.preventDefault();
+  userName.textContent  = userNameInput.value;
+  userProfession.textContent  = userProfessionInput.value;
+  togglePopup(userProfilePopup);
+}
+
+function saveCard(evt) {          // создание новой карты
+  evt.preventDefault();
+  const cardData = {name:cardTitleInput.value , link: cardLinkInput.value};
+  const card = new Card(cardData, '#card');
+  const cardElement = card.renderCard();
+  appendCard(cardElement);
+  cardTitleInput.value ='';
+  cardLinkInput.value ='';
+  togglePopup(userCardPopup);
+}
+
+function toggleUserProfilePopup() {           // Создание попапа профайла
+  userNameInput.value = userName.textContent ;
+  userProfessionInput.value = userProfession.textContent;
+  togglePopup(userProfilePopup);
+}
 
 saveProfileButton.addEventListener('submit', saveProfile);   // слушатели кнопок
 saveCardButton.addEventListener('submit', saveCard);
@@ -29,7 +55,7 @@ arrayOfPopups.forEach(function(popup) {                   // добавлени�
 })   
 
 initialCards.forEach(function(item) {     
-  const card = new Card(item.name, item.link, item.alt)    //заполнение картами из коллекции
+  const card = new Card(item, '#card')    //заполнение картами из коллекции
   const cardElement = card.renderCard();
   appendCard(cardElement);
 }); 
