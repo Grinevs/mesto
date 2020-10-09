@@ -29,7 +29,11 @@ function toggleAddCardPopup() {     //  редактирование попап�
   {
     handleFormSubmit: (formValues) => {
       const cardData = {name:formValues.title, link: formValues.subtitle};
-      const card = new Card(cardData, '#card');
+      const card = new Card(cardData, '#card', {
+        handleCardClick : (selector, src, title) => {const photoPopup = new PopupWithImage(selector, src, title);
+        photoPopup.open()
+        photoPopup.setEventListeners();}
+      });
       const cardElement = card.renderCard();
       appendCard(cardElement); 
   }}
