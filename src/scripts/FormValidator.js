@@ -40,10 +40,10 @@ export class FormValidator {
     }
   };
 
- _showInputError = (errorMessage, inputElement) => {  // показывает ошибку в спане ниже
+  _showInputError(errorMessage, inputElement)  {  
     this._errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
     this._errorElement.textContent = errorMessage;
-    this._errorElement.classList.add(this._listOfClasses.errorClass); // незадействуются в данном проекте эти классы, это на будущее?
+    this._errorElement.classList.add(this._listOfClasses.errorClass); 
     inputElement.classList.add(this._listOfClasses.inputErrorClass);
   };
   

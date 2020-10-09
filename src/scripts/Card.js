@@ -1,13 +1,11 @@
-import {toggleImagePopup} from './utils.js'
-export {Card}
-
-class Card {
-  constructor(cardData, cardSelector) {
+export class Card {
+  constructor(cardData, cardSelector, {handleCardClick}) {
       this._cardTitle = cardData.name;
       this._cardSrc = cardData.link;
       this._cardAlt = cardData.alt;
       this._likeButtonValue = cardData.likeButtonValue;
       this._cardSelector = cardSelector;
+      this._handleCardClick = handleCardClick
   }
 
   _createCard() {
@@ -31,9 +29,8 @@ class Card {
     this._likeButton.classList.toggle('element__like-button_active');
   }
 
-  _imgClick(evt) {
-    const eventTarget = evt.target;
-    toggleImagePopup(this._cardSrc, this._cardTitle);
+  _imgClick() {
+    this._handleCardClick('.popup_photo', this._cardSrc, this._cardTitle);
   }
 
   _trashButtonClick() {
@@ -46,8 +43,8 @@ class Card {
     this._likeButton.addEventListener('click', () => {
       this._likeClick();
     });
-    this._imageElement.addEventListener('click', (evt) => {
-      this._imgClick(evt);
+    this._imageElement.addEventListener('click', () => {
+      this._imgClick();
     }); 
     this._trashButton.addEventListener('click', () => {
       this._trashButtonClick();
