@@ -11,7 +11,10 @@ const presets = [
     // использовать полифиллы для браузеров из свойства target
     // по умолчанию babel использует поллифиллы библиотеки core-js
     useBuiltIns: "entry"
-  }]
+  }],
+  {
+    plugins: ["@babel/plugin-proposal-class-properties"]
+  }
 ];
 
 module.exports = { presets }; 

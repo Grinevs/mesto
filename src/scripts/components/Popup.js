@@ -1,3 +1,4 @@
+import {escKey} from '../const.js'
 export class Popup{
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
@@ -15,7 +16,7 @@ export class Popup{
   }
 
   _handleEscClose(evt) {
-    if (evt.key === 'Escape') { 
+    if (evt.keyCode === escKey) { 
       this.close()
     } 
   }
