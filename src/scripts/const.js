@@ -8,3 +8,4 @@ export const cardTitleInput = document.querySelector('.popup_card__title');
 export const cardLinkInput =  document.querySelector('.popup_card__src');
 export const cards = document.querySelector('.elements__list');
 export const arrayOfPopups = document.querySelectorAll('.popup');
+export const escKey = 27;
