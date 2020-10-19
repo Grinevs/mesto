@@ -13,7 +13,9 @@
     </header>
     <main class="content">
       <section class="profile">
-        <img src="./images/Kusto.jpg" alt="Портрет Жак-Ив Кусто в красной шапке на фоне моря" class="profile__avatar">
+        <div class="profile__overlay">
+          <img src="./images/Kusto.jpg" alt="Портрет Жак-Ив Кусто в красной шапке на фоне моря" class="profile__avatar">
+        </div>
         <div class="profile__info">
           <div class="profile__title-edit">
             <h2 class="profile__title">Жак-Ив Кусто</h2><button type="button" class="profile__edit-button"></button>
@@ -64,12 +66,33 @@
       <button type="button" class="popup__close-icon popup_photo__close-icon"></button>
   </div> 
 
+  <div class="popup popup_delete">
+    <button type="button" class="popup__close-icon popup_delete__close-icon"></button>
+    <div class="popup__container popup_delete__container">
+        <h3 class="popup__title">Вы уверены?</h3>
+        <form class="popup__form popup_delete__form" name="edit_form" novalidate>
+        <button class="popup__button popup_delete__button" type="submit">Да</button></form>
+    </div>
+</div> 
+
+<div class="popup popup_avatar">
+  <button type="button" class="popup__close-icon popup_avatar__close-icon"></button>
+  <div class="popup__container popup_avatar__container">
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form popup_avatar__form" name="edit_form" novalidate>
+      <input  id="popup_avatar__src" type="url" placeholder="Ссылка на картинку" name="subtitle" required class="popup__edit popup_avatar__src">
+      <span id="popup_avatar__src-error" class="popup__input-error"></span>
+      <button class="popup__button popup_avatar__button" type="submit">Сохранить</button></form>
+  </div>
+</div> 
+
 <template id="card">
   <li class="element">
     <img class="element__img" src="#">
     <h3 class="element__title"></h3>
     <button type="button" class="element__recyclebin"></button>
     <button type="button" class="element__like-button"></button>
+    <p class="element__likes">0</p>
   </li>
 </template>
   <!-- <script type="module" src="./scripts/const.js"></script>

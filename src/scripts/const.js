@@ -9,3 +9,6 @@ export const cardLinkInput =  document.querySelector('.popup_card__src');
 export const cards = document.querySelector('.elements__list');
 export const arrayOfPopups = document.querySelectorAll('.popup');
 export const escKey = 27;
+export const editAvatarImg = document.querySelector('.profile__avatar');
+export const ownerId = 'c0e8feee4dd762daf7635941';
+export const popupButton = document.querySelector('.popup__button');
