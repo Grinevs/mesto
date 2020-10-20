@@ -17,12 +17,12 @@ const configApi = {url: 'https://mesto.nomoreparties.co/v1/cohort-16' ,
 const user = new UserInfo({userName: '.profile__title', userAbout: '.profile__subtitle', avatar: '.profile__avatar'}) 
 const api = new Api(configApi);
 
-function renderLoading(status) {
+function renderLoading(status, selector) {
   if (status) {
-    popupButton.innerText = 'Сохрание...'
+    document.querySelector(selector).innerHTML = 'Сохрание...'
   }
   else {
-    popupButton.innerText = 'Сохранить'
+    document.querySelector(selector).innerHTML = 'Сохранить'
   }
 }
 
@@ -34,7 +34,7 @@ function toggleUserProfilePopup() {
   const userProfile = new PopupWithForm('.popup_profile', 
   {
     handleFormSubmit: (formValues) => {
-      renderLoading(true)
+      renderLoading(true, '.popup_profile__button')
      api.editUserProfile({name: formValues.title, about: formValues.subtitle})
      .then(() => {
       user.setUserInfo(formValues.title, formValues.subtitle, editAvatarImg.src )
@@ -45,7 +45,7 @@ function toggleUserProfilePopup() {
     
   }}
 )
-renderLoading(false)
+renderLoading(false, '.popup_profile__button')
 userProfile.open()
 userProfile.setEventListeners();
 }
@@ -54,7 +54,7 @@ function editAvatar() {
   const userProfile = new PopupWithForm('.popup_avatar', 
   {
     handleFormSubmit: (formValues) => {
-      renderLoading(true)
+      renderLoading(true, '.popup_avatar__button')
      api.editUserAvatar({avatar: formValues.subtitle})
      .then(() => {
       user.setUserAvatar(formValues.subtitle)
@@ -65,7 +65,7 @@ function editAvatar() {
     
   }}
 )
-renderLoading(false)
+renderLoading(false, '.popup_avatar__button')
 userProfile.open()
 userProfile.setEventListeners(); 
 }
@@ -77,7 +77,7 @@ function toggleAddCardPopup() {   //  редактирование попапа 
   const cardProfile = new PopupWithForm('.popup_card', 
   {
     handleFormSubmit: (formValues) => {
-      renderLoading(true)
+      renderLoading(true, '.popup_card__button')
       const cardData = {name:formValues.title, link: formValues.subtitle}; 
       api.addNewCard(cardData)
       .then((data) => {
@@ -144,7 +144,7 @@ function toggleAddCardPopup() {   //  редактирование попапа 
         }); 
   }}
 ) 
- renderLoading(false)
+ renderLoading(false, '.popup_card__button')
   cardProfile.open()
   cardProfile.setEventListeners();
 }
