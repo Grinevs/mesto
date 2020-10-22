@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import '../images/favicon.png';
 import {editProfileButton, addCardButton,
-  userNameInput,  userProfessionInput, editAvatarImg, ownerId, popupButton} from './const.js';
+  userNameInput,  userProfessionInput, editAvatarImg} from './const.js';
 
 import {PopupWithForm} from './components/PopupWithForm.js';
 import {PopupWithImage} from './components/PopupWithImage.js';
@@ -14,8 +14,22 @@ import {Api} from './components/Api.js';
 const configApi = {url: 'https://mesto.nomoreparties.co/v1/cohort-16' ,
   headers: {authorization: '070b2a82-6a1e-49d9-8bec-07436830ab2d', 'Content-Type': 'application/json'}
 }
-const user = new UserInfo({userName: '.profile__title', userAbout: '.profile__subtitle', avatar: '.profile__avatar'}) 
+const user = new UserInfo({userName: '.profile__title',
+  userAbout: '.profile__subtitle',
+  avatar: '.profile__avatar'}) 
+  
 const api = new Api(configApi);
+export let ownerId  
+
+api.getUserProfile()
+  .then((getUser) => {
+    user.setUserInfo(getUser.name ,getUser.about, getUser.avatar)
+    ownerId = getUser._id  
+  })
+  .catch((err) => {
+    console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
+
 
 function renderLoading(status, selector) {
   if (status) {
@@ -26,55 +40,123 @@ function renderLoading(status, selector) {
   }
 }
 
-function toggleUserProfilePopup() {   
+const userProfile = new PopupWithForm('.popup_profile', 
+{
+  handleFormSubmit: (formValues) => {
+  renderLoading(true, '.popup_profile__button')
+  api.editUserProfile({name: formValues.title, about: formValues.subtitle})
+    .then(() => {
+      user.setUserInfo(formValues.title, formValues.subtitle, editAvatarImg.src )
+   })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  })
+    .finally(()=>{
+      renderLoading(false, '.popup_profile__button')
+  }); 
   
+}}
+)
+
+userProfile.setEventListeners();
+
+function editUserProfilePopup() {   
   userNameInput.value = user.getUserInfo().userName;
   userProfessionInput.value = user.getUserInfo().userAbout;
-  editAvatarImg.src = user.getUserInfo().avatar;
-  const userProfile = new PopupWithForm('.popup_profile', 
+  userProfile.open()
+}
+
+const userProfileAvatar = new PopupWithForm('.popup_avatar', 
   {
     handleFormSubmit: (formValues) => {
-      renderLoading(true, '.popup_profile__button')
-     api.editUserProfile({name: formValues.title, about: formValues.subtitle})
-     .then(() => {
-      user.setUserInfo(formValues.title, formValues.subtitle, editAvatarImg.src )
+    renderLoading(true, '.popup_avatar__button')
+    api.editUserAvatar({avatar: formValues.subtitle})
+      .then(() => {
+        user.setUserAvatar(formValues.subtitle)
      })
-     .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    }); 
-    
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+     })
+      .finally(()=>{
+        userProfileAvatar.close()
+        renderLoading(false, '.popup_avatar__button')
+  });  
   }}
 )
-renderLoading(false, '.popup_profile__button')
-userProfile.open()
-userProfile.setEventListeners();
-}
+
+userProfileAvatar.setEventListeners(); 
 
 function editAvatar() {
-  const userProfile = new PopupWithForm('.popup_avatar', 
-  {
-    handleFormSubmit: (formValues) => {
-      renderLoading(true, '.popup_avatar__button')
-     api.editUserAvatar({avatar: formValues.subtitle})
-     .then(() => {
-      user.setUserAvatar(formValues.subtitle)
-     })
-     .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    }); 
-    
-  }}
-)
-renderLoading(false, '.popup_avatar__button')
-userProfile.open()
-userProfile.setEventListeners(); 
+ userProfileAvatar.open()
 }
 
+const photoPopup = new PopupWithImage('.popup_photo');
+photoPopup.setEventListeners();
 
+let cardIdToDelete          
+let itemToDeleleteDOM
 
-function toggleAddCardPopup() {   //  редактирование попапа добавления места - карты
-  
-  const cardProfile = new PopupWithForm('.popup_card', 
+const popupDelete = new PopupWithForm('.popup_delete', {
+  handleFormSubmit: () => {
+    api.deleteCard(cardIdToDelete)
+    .then(() => {
+      itemToDeleleteDOM.remove()
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      popupDelete.close()
+    }); 
+    }
+});
+
+popupDelete.setEventListeners();
+
+function createCard(cardData) {
+   const card = new Card(cardData, '#card', {
+    handleCardClick : (selector, src, title) => {
+      photoPopup.open(src, title);}  
+  }, 
+  {
+    deleteButtonClick: (itemToDelete, cardId) => {
+      cardIdToDelete =cardId;
+      itemToDeleleteDOM = itemToDelete
+      popupDelete.open();
+    }
+  },
+  {
+    handleLikeClick: () => {
+      if (card.checkLike()) {
+        api.removeLike(cardData._id)
+        .then((data) => {
+          cardData.countLikes = ((data.likes).length)
+          cardData.likes.pop(ownerId)
+          card.updateLike(cardData.countLikes)
+        })
+        .catch((err) => {
+          console.log('Ошибка. Запрос не выполнен: ', err);
+        }); 
+        } else { 
+          api.addLike(cardData._id)
+          .then((data) => {
+            cardData.countLikes = ((data.likes).length)
+            cardData.likes.push(ownerId) 
+            card.updateLike(cardData.countLikes)
+          })
+          .catch((err) => {
+            console.log('Ошибка. Запрос не выполнен: ', err);
+      });
+        }
+      } 
+    }
+  );
+  return card
+}
+
+let cardListGlobal
+
+const cardProfile = new PopupWithForm('.popup_card', 
   {
     handleFormSubmit: (formValues) => {
       renderLoading(true, '.popup_card__button')
@@ -87,157 +169,50 @@ function toggleAddCardPopup() {   //  редактирование попапа 
         cardData.liked = false
         cardData.likes = [];
         cardData._id = data._id;
-        return new Card(cardData, '#card', {
-          handleCardClick : (selector, src, title) => {
-          const photoPopup = new PopupWithImage(selector);
-          photoPopup.open(src, title);
-          photoPopup.setEventListeners();} 
-        }, 
-        {
-          deleteButtonClick: (itemToDelete, cardId) => {
-              const popupDelete = new PopupWithForm('.popup_delete', {
-                handleFormSubmit: () => {
-                  api.deleteCard(cardId)
-                  .then(() => {
-                    itemToDelete.remove()
-                  })
-                  .catch((err) => {
-                    console.log('Ошибка. Запрос не выполнен: ', err);
-                  }); 
-                }
-              });
-              popupDelete.open();
-              popupDelete.setEventListeners();
-          }},
-          {
-            handleLikeClick: () => {
-              const arrOfLikes = cardData.likes;
-            if (arrOfLikes.includes(ownerId)) {
-              api.removeLike(cardData._id)
-              .then((data) => {
-                cardData.countLikes = ((data.likes).length)
-                cardData.likes.pop(ownerId)
-              })
-              .catch((err) => {
-                console.log('Ошибка. Запрос не выполнен: ', err);
-              }); } else { 
-                api.addLike(cardData._id)
-                .then((data) => {
-                  cardData.countLikes = ((data.likes).length)
-                  cardData.likes.push(ownerId) 
-                })
-                .catch((err) => {
-                  console.log('Ошибка. Запрос не выполнен: ', err);
-            });
-              }
-            } 
-          }
-        );
+        return createCard(cardData);
       })
       .then((card) => {
-          const cardElement = card.renderCard();
-          const cardList = new Section({data: cardElement}, '.elements__list')
-          cardList.addItem(cardElement, false);
+        const newCardElement =card.renderCard()
+        cardListGlobal.addItem(newCardElement, false);
         })
       .catch((err) => {
-          console.log('Ошибка. Запрос не выполнен: ', err);
-        }); 
+        console.log('Ошибка. Запрос не выполнен: ', err);
+        })
+      .finally(()=>{
+        cardProfile.close()
+        renderLoading(false, '.popup_card__button')
+    });   
   }}
 ) 
- renderLoading(false, '.popup_card__button')
-  cardProfile.open()
-  cardProfile.setEventListeners();
-}
+cardProfile.setEventListeners();
 
+function addCardPopup()  { //  редактирование попапа добавления места - карты
+  cardProfile.open()
+}
 
 api.getInitialCards()
 .then((cardsInit) => {
   const cardList = new Section({
     data: cardsInit,
-    renderer: (cardItem) => { 
+    renderer: (cardItem) => {
       const arrayOfLikes =cardItem.likes;
       const checkArray = arrayOfLikes.map((item)=> item._id)
       if (checkArray.includes(ownerId)) {
         cardItem.liked = true
       } else {cardItem.liked = false}
       cardItem.countLikes = (arrayOfLikes).length;
-      const card =  new Card(cardItem, '#card', {
-        handleCardClick : (selector, src, title) => {
-          const photoPopup = new PopupWithImage(selector);
-          photoPopup.open(src, title);
-          photoPopup.setEventListeners();
-      }}, {
-        deleteButtonClick: (itemToDelete, cardId) => {
-          const popupDelete = new PopupWithForm('.popup_delete', {
-            handleFormSubmit: () => {
-              api.deleteCard(cardId)
-              .then(() => {
-                itemToDelete.remove()
-              })
-              .catch((err) => {
-                console.log('Ошибка. Запрос не выполнен: ', err);
-              }); 
-            }
-          });
-          popupDelete.open();
-          popupDelete.setEventListeners();
-        }},{
-          handleLikeClick: (cardId) => { 
-            
-            let newArrOfOwners = []
-              for (let i= 0; i < cardsInit.length-1; i++) {
-                if (cardsInit[i]._id === cardId) {
-                  newArrOfOwners = cardsInit[i].likes;
-                }
-              }
-              const arrOfLikes = newArrOfOwners.map((item) => item._id)
-            if (arrOfLikes.includes(ownerId)) {
-              api.removeLike(cardId)
-              .then((data) => {
-                card.setLike((data.likes).length)
-                api.getInitialCards().then((data) => {cardsInit = data})
-                .catch((err) => {
-                  console.log('Ошибка. Запрос не выполнен: ', err);
-            });
-              })
-              .catch((err) => {
-                console.log('Ошибка. Запрос не выполнен: ', err);
-              }); } else { 
-                api.addLike(cardId)
-                .then((data) => {
-                  card.setLike((data.likes).length)
-                  api.getInitialCards().then((data) => {cardsInit = data})
-                  .catch((err) => {
-                  console.log('Ошибка. Запрос не выполнен: ', err);
-            });
-                })
-                .catch((err) => {
-                  console.log('Ошибка. Запрос не выполнен: ', err);
-            });
-              }
-          } 
-        }
-        )
-      const cardElement = card.renderCard();
+      const cardElement = createCard(cardItem).renderCard();
       cardList.addItem(cardElement, true);
     }
   },
   '.elements__list'
   ); 
+  cardListGlobal = cardList
   cardList.renderedItems(); 
 })
 .catch((err) => {
   console.log('Ошибка. Запрос не выполнен: ', err);
 }); 
-
-api.getUserProfile()
-  .then((getUser) => {
-    user.setUserInfo(getUser.name ,getUser.about, getUser.avatar)
-  })
-  .catch((err) => {
-    console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
-
 
 function enableValidation(listOfClasses) { // валидация
   const formList = Array.from(document.querySelectorAll(listOfClasses.formSelector));
@@ -247,8 +222,8 @@ function enableValidation(listOfClasses) { // валидация
   });
 }
 
-editProfileButton.addEventListener('click', toggleUserProfilePopup);
-addCardButton.addEventListener('click', toggleAddCardPopup);
+editProfileButton.addEventListener('click', editUserProfilePopup);
+addCardButton.addEventListener('click', addCardPopup);
 editAvatarImg.addEventListener('click', editAvatar);
 
 enableValidation({
@@ -259,7 +234,5 @@ enableValidation({
   inputErrorClass: 'popup__edit_type_error',
   errorClass: 'popup__error_visible'});
 
-
-  
 
   

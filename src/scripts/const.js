@@ -1,5 +1,3 @@
-export const popupPhoto = document.querySelector('.popup_photo__pic');
-export const popupTitle = document.querySelector('.popup_photo__title');
 export const editProfileButton = document.querySelector('.profile__edit-button');
 export const addCardButton = document.querySelector('.profile__add-button');
 export const userNameInput = document.querySelector('.popup_profile__title');
@@ -10,5 +8,3 @@ export const cards = document.querySelector('.elements__list');
 export const arrayOfPopups = document.querySelectorAll('.popup');
 export const escKey = 27;
 export const editAvatarImg = document.querySelector('.profile__avatar');
-export const ownerId = 'c0e8feee4dd762daf7635941';
-export const popupButton = document.querySelector('.popup__button');

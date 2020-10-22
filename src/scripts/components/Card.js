@@ -1,4 +1,4 @@
-
+import {ownerId} from '../index.js'
 export class Card {
   constructor(cardData, cardSelector, {handleCardClick}, {deleteButtonClick}, {handleLikeClick}) {
       this._cardTitle = cardData.name;
@@ -7,7 +7,7 @@ export class Card {
       this._cardSelector = cardSelector;
       this._handleCardClick = handleCardClick;
       this._trashButtonClick = deleteButtonClick;
-      this._trashEnabled = (cardData.owner._id === 'c0e8feee4dd762daf7635941') ? true : false;
+      this._trashEnabled = (cardData.owner._id === ownerId) ? true : false;
       this._cardId = cardData._id;
       this._handleLikeClick = handleLikeClick
       this._liked = cardData.liked;
@@ -39,12 +39,17 @@ export class Card {
     return this._element;
   }
 
-  setLike(likes) {
-    this.likes = likes
-  }
-
   _likeClick() {
     this._handleLikeClick(this._cardId)
+    
+  }
+
+  _imgClick() {
+    this._handleCardClick('.popup_photo', this._cardSrc, this._cardTitle);
+  }
+ 
+  updateLike(likes) {  // вызвать ее в then fetch
+    this.likes = likes
     if (this._likeButton.classList.contains('element__like-button_active')) {
       this._likeButton.classList.remove('element__like-button_active');
       this._likes = this._likes - 1;
@@ -53,17 +58,12 @@ export class Card {
       this._likes = this._likes + 1;
       this._likeButtonValue.textContent = this._likes;
   }
-     
+}  
+
+checkLike() {
+  return (this._likeButton.classList.contains('element__like-button_active')) ? true : false;
   }
 
-  _imgClick() {
-    this._handleCardClick('.popup_photo', this._cardSrc, this._cardTitle);
-  }
-
-  // _trashButtonClick(itemToDelete, cardId) {
-  //     itemToDelete.remove();
-  //     this._element = null;
-  // }
 
   _setEventListeners() {
     this._likeButton.addEventListener('click', () => {
@@ -78,6 +78,9 @@ export class Card {
       this._trashButtonClick(itemToDelete, cardId);
     });
   }
+
+
+
 };
 
 
