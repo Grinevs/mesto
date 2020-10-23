@@ -19,11 +19,12 @@ const user = new UserInfo({userName: '.profile__title',
   avatar: '.profile__avatar'}) 
   
 const api = new Api(configApi);
-export let ownerId  
+let ownerId
 
 api.getUserProfile()
   .then((getUser) => {
-    user.setUserInfo(getUser.name ,getUser.about, getUser.avatar)
+    user.setUserInfo(getUser.name ,getUser.about)
+    user.setUserAvatar(getUser.avatar)
     ownerId = getUser._id  
   })
   .catch((err) => {
@@ -40,19 +41,19 @@ function renderLoading(status, selector) {
   }
 }
 
-const userProfile = new PopupWithForm('.popup_profile', 
-{
-  handleFormSubmit: (formValues) => {
+const userProfile = new PopupWithForm('.popup_profile', {
+  handleFormSubmit: ({title, subtitle}) => {
   renderLoading(true, '.popup_profile__button')
-  api.editUserProfile({name: formValues.title, about: formValues.subtitle})
+  api.editUserProfile({name: title, about: subtitle})
     .then(() => {
-      user.setUserInfo(formValues.title, formValues.subtitle, editAvatarImg.src )
+      user.setUserInfo(title, subtitle)
    })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);
   })
     .finally(()=>{
       renderLoading(false, '.popup_profile__button')
+      userProfile.close()
   }); 
   
 }}
@@ -114,25 +115,20 @@ const popupDelete = new PopupWithForm('.popup_delete', {
 popupDelete.setEventListeners();
 
 function createCard(cardData) {
-   const card = new Card(cardData, '#card', {
-    handleCardClick : (selector, src, title) => {
+   const card = new Card(cardData, '#card', ownerId, 
+    {handleCardClick : (selector, src, title) => {
       photoPopup.open(src, title);}  
-  }, 
-  {
-    deleteButtonClick: (itemToDelete, cardId) => {
+    }, 
+    {deleteButtonClick : (itemToDelete, cardId) => {
       cardIdToDelete =cardId;
       itemToDeleleteDOM = itemToDelete
       popupDelete.open();
-    }
-  },
-  {
-    handleLikeClick: () => {
+    }},{
+    handleLikeClick : () => {
       if (card.checkLike()) {
         api.removeLike(cardData._id)
         .then((data) => {
-          cardData.countLikes = ((data.likes).length)
-          cardData.likes.pop(ownerId)
-          card.updateLike(cardData.countLikes)
+          card.updateLike(data)
         })
         .catch((err) => {
           console.log('Ошибка. Запрос не выполнен: ', err);
@@ -140,16 +136,13 @@ function createCard(cardData) {
         } else { 
           api.addLike(cardData._id)
           .then((data) => {
-            cardData.countLikes = ((data.likes).length)
-            cardData.likes.push(ownerId) 
-            card.updateLike(cardData.countLikes)
+            card.updateLike(data)
           })
           .catch((err) => {
             console.log('Ошибка. Запрос не выполнен: ', err);
       });
         }
-      } 
-    }
+      }}
   );
   return card
 }
@@ -160,16 +153,11 @@ const cardProfile = new PopupWithForm('.popup_card',
   {
     handleFormSubmit: (formValues) => {
       renderLoading(true, '.popup_card__button')
-      const cardData = {name:formValues.title, link: formValues.subtitle}; 
-      api.addNewCard(cardData)
+      api.addNewCard({name:formValues.title, link: formValues.subtitle})
       .then((data) => {
-        cardData.countLikes=0;
-        cardData.owner= {};
-        cardData.owner._id = ownerId;
-        cardData.liked = false
-        cardData.likes = [];
-        cardData._id = data._id;
-        return createCard(cardData);
+        data.name = formValues.title
+        data.link = formValues.subtitle
+        return createCard(data);
       })
       .then((card) => {
         const newCardElement =card.renderCard()
@@ -199,8 +187,9 @@ api.getInitialCards()
       const checkArray = arrayOfLikes.map((item)=> item._id)
       if (checkArray.includes(ownerId)) {
         cardItem.liked = true
-      } else {cardItem.liked = false}
-      cardItem.countLikes = (arrayOfLikes).length;
+      } else {
+        cardItem.liked = false
+      }
       const cardElement = createCard(cardItem).renderCard();
       cardList.addItem(cardElement, true);
     }

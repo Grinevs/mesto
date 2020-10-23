@@ -1,17 +1,16 @@
-import {ownerId} from '../index.js'
 export class Card {
-  constructor(cardData, cardSelector, {handleCardClick}, {deleteButtonClick}, {handleLikeClick}) {
+  constructor(cardData, cardSelector, ownerId, {handleCardClick}, {deleteButtonClick}, {handleLikeClick}) {
       this._cardTitle = cardData.name;
       this._cardSrc = cardData.link;
-      this._likes = cardData.countLikes;
+      this._likes = cardData.likes;
       this._cardSelector = cardSelector;
       this._handleCardClick = handleCardClick;
       this._trashButtonClick = deleteButtonClick;
       this._trashEnabled = (cardData.owner._id === ownerId) ? true : false;
       this._cardId = cardData._id;
       this._handleLikeClick = handleLikeClick
+      this._ownerId = ownerId;
       this._liked = cardData.liked;
-      
     
 }
 
@@ -26,9 +25,11 @@ export class Card {
     this._imageElement = this._element.querySelector('.element__img');
     this._imageElement.src = this._cardSrc;
     this._likeButton = this._element.querySelector('.element__like-button'); 
-    this._element.querySelector('.element__likes').textContent = this._likes;
+    this._element.querySelector('.element__likes').textContent = this._likes.length;
     this._likeButtonValue = this._element.querySelector('.element__likes') 
-    if (this._liked == true) {this._likeButton.classList.add('element__like-button_active')}
+    if ((this.checkLike()) || (this._liked)) {
+      this._likeButton.classList.add('element__like-button_active')
+    }
     this._trashButton = this._element.querySelector('.element__recyclebin');
     if  (this._trashEnabled)  {
       this._trashButton.style.display = "block"
@@ -48,20 +49,18 @@ export class Card {
     this._handleCardClick('.popup_photo', this._cardSrc, this._cardTitle);
   }
  
-  updateLike(likes) {  // вызвать ее в then fetch
-    this.likes = likes
-    if (this._likeButton.classList.contains('element__like-button_active')) {
+  updateLike(data) {  // вызвать ее в then fetch
+    this._likes = data.likes;
+    this._likeButtonValue.textContent = this._likes.length;
+    if (this.checkLike()) {
       this._likeButton.classList.remove('element__like-button_active');
-      this._likes = this._likes - 1;
-      this._likeButtonValue.textContent = this._likes;
-    } else {this._likeButton.classList.add('element__like-button_active');
-      this._likes = this._likes + 1;
-      this._likeButtonValue.textContent = this._likes;
-  }
-}  
+    } else {
+      this._likeButton.classList.add('element__like-button_active');
+    }
+  }  
 
-checkLike() {
-  return (this._likeButton.classList.contains('element__like-button_active')) ? true : false;
+  checkLike() {
+    return (this._likeButton.classList.contains('element__like-button_active')) ? true : false;
   }
 
 
